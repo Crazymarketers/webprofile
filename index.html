@@ -1,166 +1,331 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0c0c0c" />
-  <meta name="description" content="Meet available Baaraku talent, watch their video introductions, and book an interview directly." />
-  <title>Baaraku — Meet Available Talent</title>
-  <style>
-    :root{
-      --bg:#f4f3ef;
-      --surface:#ffffff;
-      --surface-2:#efeee9;
-      --ink:#0c0c0c;
-      --muted:#72716d;
-      --line:#deddd7;
-      --orange:#f7931a;
-      --orange-soft:#fff1df;
-      --radius-xl:30px;
-      --radius-lg:22px;
-      --radius-md:16px;
-      --shadow:0 24px 70px rgba(18,18,16,.09);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-    button,a{font:inherit}
-    a{color:inherit}
-    .page{width:min(100%,1280px);margin:auto;padding:24px 22px 80px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:4px 0 28px}
-    .logo{font-size:26px;font-weight:900;letter-spacing:-.055em}.logo span{color:var(--orange)}
-    .top-note{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Baaraku Staffing — Interview Available Talent</title>
+<meta name="description" content="Watch available Baaraku candidates, choose who you want to meet, and book a direct interview this week." />
+<style>
+  :root{
+    --ink:#111111;
+    --muted:#6b6b6b;
+    --line:#e8e6e1;
+    --soft:#f7f6f2;
+    --orange:#f7931a;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    color:var(--ink);
+    background:#fff;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button,a{font:inherit}
+  .page{max-width:1220px;margin:0 auto;padding:20px 28px 60px}
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 0 22px;
+  }
+  .brand{
+    font-weight:850;
+    letter-spacing:-.04em;
+    font-size:24px;
+  }
+  .brand span{color:var(--orange)}
+  .brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .phone-link{color:var(--ink);text-decoration:none;font-size:13px;font-weight:700}
+  .hero{padding:4px 0 22px}
+  .video-shell{
+    width:100%;
+    aspect-ratio:16/8.5;
+    border-radius:28px;
+    overflow:hidden;
+    background:#111;
+    box-shadow:0 18px 50px rgba(0,0,0,.08);
+    position:relative;
+  }
+  .video-shell iframe{width:100%;height:100%;border:0;display:block}
+  .hero-placeholder{
+    width:100%;height:100%;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    background:
+      radial-gradient(circle at 25% 20%,rgba(247,147,26,.22),transparent 30%),
+      linear-gradient(135deg,#171717,#050505);
+    text-align:center;
+    padding:32px;
+  }
+  .hero-placeholder-inner{max-width:620px}
+  .hero-placeholder .play{
+    width:74px;height:74px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.35);
+    display:grid;place-items:center;
+    margin:0 auto 20px;
+    font-size:26px;
+  }
+  .hero-placeholder strong{display:block;font-size:30px;letter-spacing:-.04em;margin-bottom:8px}
+  .hero-placeholder p{margin:0;color:#cfcfcf;font-size:15px;line-height:1.55}
+  .hidden{display:none!important}
 
-    .hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:42px;align-items:center;padding:42px 0 68px}
-    .hero-copy{max-width:610px}
-    .kicker{display:inline-flex;align-items:center;gap:8px;background:var(--orange-soft);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:22px}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
-    h1{font-size:clamp(48px,6.7vw,92px);line-height:.92;letter-spacing:-.065em;margin:0 0 22px;max-width:760px}
-    .hero-copy p{font-size:clamp(17px,2vw,22px);line-height:1.5;color:var(--muted);max-width:580px;margin:0 0 26px}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:14px;padding:15px 19px;font-weight:850;border:1px solid transparent;transition:.16s ease;cursor:pointer}
-    .btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
-    .btn-secondary{background:transparent;border-color:#c9c8c1;color:var(--ink)}
-    .hero-note{font-size:13px;color:var(--muted);margin-top:12px}
+  .statement{
+    max-width:880px;
+    margin:34px auto 54px;
+    text-align:center;
+  }
+  .eyebrow{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--muted);
+    font-weight:800;
+    margin-bottom:14px;
+  }
+  .statement h1{
+    margin:0;
+    font-size:clamp(34px,5vw,66px);
+    line-height:.98;
+    letter-spacing:-.055em;
+    font-weight:850;
+  }
+  .statement p{
+    max-width:700px;
+    margin:18px auto 0;
+    font-size:17px;
+    line-height:1.6;
+    color:var(--muted);
+  }
+  .cta-line{
+    margin-top:24px;
+    font-size:15px;
+    font-weight:800;
+  }
+  .cta-line span{color:var(--orange)}
 
-    .hero-video-card{background:#111;border-radius:var(--radius-xl);padding:10px;box-shadow:var(--shadow);border:1px solid #222}
-    .hero-video{aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#171717,#050505);position:relative}
-    .hero-video iframe{width:100%;height:100%;border:0;display:block}
-    .video-placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:28px;color:#fff;background:radial-gradient(circle at 70% 20%,rgba(247,147,26,.22),transparent 35%),#101010}
-    .video-placeholder-inner{max-width:420px}.video-placeholder strong{display:block;font-size:22px;margin-bottom:8px}.video-placeholder span{color:#bdbdbd;font-size:14px;line-height:1.5}
-    .video-caption{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 8px 3px;color:#dadada;font-size:12px}
+  .roles-section{padding-top:18px}
+  .section-title{text-align:center;margin-bottom:22px}
+  .section-title h2{margin:0;font-size:28px;letter-spacing:-.035em}
+  .section-title p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .roles{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+  }
+  .role{
+    appearance:none;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    border-radius:18px;
+    padding:18px;
+    min-height:82px;
+    text-align:left;
+    cursor:pointer;
+    transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+    font-weight:800;
+  }
+  .role small{display:block;font-size:11px;color:var(--muted);margin-top:5px;font-weight:600}
+  .role:hover{transform:translateY(-2px);border-color:#cbc7bf;box-shadow:0 10px 26px rgba(0,0,0,.05)}
+  .role.active{border-color:#1a1a1a;box-shadow:inset 0 0 0 1px #1a1a1a}
 
-    .availability-strip{display:flex;align-items:center;justify-content:space-between;gap:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin-bottom:58px}
-    .availability-strip strong{font-size:16px}.availability-strip span{color:var(--muted);font-size:14px}
+  .gallery-wrap{margin-top:28px}
+  .status-box{
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--soft);
+    color:var(--muted);
+    text-align:center;
+    padding:18px;
+    font-size:14px;
+  }
+  .preview-placeholders,.candidates{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+    margin-top:18px;
+  }
+  .preview-placeholder,.candidate{
+    border:1px solid var(--line);
+    border-radius:22px;
+    overflow:hidden;
+    background:#fff;
+  }
+  .preview-screen{
+    aspect-ratio:16/10;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#ecebe7,#f8f7f4);
+    color:#aaa;
+    font-size:28px;
+  }
+  .preview-lines{padding:15px 16px 17px}
+  .preview-line{height:9px;border-radius:999px;background:#e8e7e2;margin-bottom:9px}
+  .preview-line.short{width:52%}
 
-    .talent-section{scroll-margin-top:24px}
-    .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
-    .section-title h2{font-size:clamp(34px,4vw,54px);letter-spacing:-.055em;margin:0 0 8px}.section-title p{margin:0;color:var(--muted);font-size:16px}
-    .section-badge{font-size:12px;color:var(--muted);white-space:nowrap}
-    .roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:28px}
-    .role{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.68);padding:18px 18px 17px;border-radius:18px;text-align:left;font-weight:850;cursor:pointer;transition:.16s ease;min-height:82px}
-    .role:hover,.role:focus-visible{outline:none;border-color:#a8a7a0;background:#fff;transform:translateY(-1px)}
-    .role.active{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.12)}
-    .role small{display:block;font-weight:500;font-size:12px;margin-top:6px;opacity:.62}
+  .candidate{
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+    box-shadow:0 8px 28px rgba(0,0,0,.035);
+  }
+  .candidate-video{aspect-ratio:16/10;background:#111}
+  .candidate-video iframe{width:100%;height:100%;border:0;display:block}
+  .candidate-body{padding:17px 17px 6px}
+  .meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+  .pill{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:5px 8px;
+    font-size:10px;
+    color:var(--muted);
+    font-weight:800;
+    letter-spacing:.02em;
+  }
+  .candidate h3{margin:0;font-size:20px;letter-spacing:-.025em}
+  .candidate p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+  .candidate-actions{padding:16px 17px 18px;margin-top:auto}
+  .book{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:46px;
+    border-radius:13px;
+    background:var(--ink);
+    color:#fff;
+    text-decoration:none;
+    font-weight:800;
+    font-size:13px;
+  }
+  .secondary{text-align:center;margin-top:10px}
+  .secondary a{font-size:12px;color:var(--ink);text-decoration:none;font-weight:700}
+  .pagination{
+    grid-column:1/-1;
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    padding:8px 0 0;
+    color:var(--muted);font-size:12px;
+  }
+  .pagination button{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 14px;cursor:pointer;font-weight:750;
+  }
+  .pagination button:disabled{opacity:.35;cursor:not-allowed}
 
-    #state{margin:8px 0 18px}.status-box{padding:28px;border:1px dashed #c7c6c0;border-radius:20px;text-align:center;color:var(--muted);background:rgba(255,255,255,.42)}
-    .candidates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-    .candidate{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 10px 30px rgba(18,18,16,.04);display:flex;flex-direction:column;min-width:0}
-    .candidate-video{aspect-ratio:16/9;background:#0f0f0f;position:relative;overflow:hidden}
-    .candidate-video iframe,.candidate-video video{width:100%;height:100%;border:0;display:block;object-fit:cover}
-    .video-missing{aspect-ratio:16/9;background:var(--surface-2);display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:13px}
-    .candidate-body{padding:17px 18px 8px;flex:1}
-    .meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.pill{font-size:10px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);background:#fafaf8;text-transform:uppercase;letter-spacing:.05em}
-    .candidate h3{font-size:22px;letter-spacing:-.04em;margin:0 0 8px}.candidate p{font-size:13px;line-height:1.5;color:var(--muted);margin:0}
-    .candidate-actions{padding:12px 18px 18px;display:grid;gap:10px}.book{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;background:var(--orange);color:#111;font-weight:900;padding:14px;border-radius:13px;transition:.16s ease}.book:hover,.book:focus-visible{filter:brightness(.97);transform:translateY(-1px);outline:none}
-    .secondary{text-align:center;font-size:12px;color:var(--muted)}.secondary a{text-underline-offset:3px}
-    .pagination{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 0 0}.pagination button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 15px;font-weight:700;cursor:pointer}.pagination button:disabled{opacity:.35;cursor:not-allowed}.pagination span{font-size:12px;color:var(--muted)}
-    .footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:12px}
-    .preview-placeholders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:18px}
-    .preview-placeholder{border:1px solid var(--line);background:rgba(255,255,255,.58);border-radius:22px;overflow:hidden}
-    .preview-screen{aspect-ratio:16/10;background:linear-gradient(135deg,#ecebe6,#f8f7f3);display:grid;place-items:center;color:#aaa;font-size:28px}
-    .preview-lines{padding:15px 16px 17px}
-    .preview-line{height:9px;border-radius:99px;background:#e8e7e2;margin-bottom:9px}
-    .preview-line.short{width:52%}
-    .contact-strip{margin-top:42px;padding:22px 24px;border:1px solid var(--line);border-radius:22px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:22px}
-    .contact-strip strong{display:block;font-size:17px;margin-bottom:4px}
-    .contact-strip p{margin:0;color:var(--muted);font-size:13px}
-    .contact-links{display:flex;gap:10px;flex-wrap:wrap}
-    .contact-link{display:inline-flex;align-items:center;min-height:42px;padding:0 15px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);font-weight:750;font-size:13px;background:#fafafa}
-    .hidden{display:none!important}
+  .contact-strip{
+    margin-top:64px;
+    padding:26px 0 4px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+  }
+  .contact-strip h3{margin:0 0 6px;font-size:20px;letter-spacing:-.025em}
+  .contact-strip p{margin:0;color:var(--muted);font-size:13px}
+  .contact-links{display:flex;gap:10px;flex-wrap:wrap}
+  .contact-link{
+    text-decoration:none;color:var(--ink);
+    border:1px solid var(--line);
+    padding:10px 14px;border-radius:999px;
+    font-size:12px;font-weight:800;
+  }
+  footer{margin-top:26px;color:#9a9a9a;font-size:11px;display:flex;justify-content:space-between;gap:16px}
 
-    @media(max-width:980px){.hero{grid-template-columns:1fr;gap:28px;padding-top:24px}.hero-copy{max-width:760px}.roles{grid-template-columns:repeat(2,minmax(0,1fr))}.candidates{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-placeholders{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:640px){.page{padding:18px 15px 58px}.topbar{padding-bottom:12px}.top-note{font-size:10px}.hero{padding:22px 0 42px}.hero-actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.availability-strip{align-items:flex-start;flex-direction:column;margin-bottom:42px}.section-head{align-items:flex-start;flex-direction:column}.roles{grid-template-columns:1fr 1fr;gap:9px}.role{padding:15px;min-height:72px}.candidates{grid-template-columns:1fr}.preview-placeholders{grid-template-columns:1fr}.contact-strip{align-items:flex-start;flex-direction:column}.footer{flex-direction:column}}
-    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+  @media(max-width:960px){
+    .roles{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .preview-placeholders,.candidates{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:640px){
+    .page{padding:14px 14px 42px}
+    .topbar{padding-bottom:14px}
+    .phone-link{display:none}
+    .video-shell{border-radius:20px;aspect-ratio:16/10}
+    .statement{margin:26px auto 40px;text-align:left}
+    .statement p{margin-left:0;margin-right:0}
+    .section-title{text-align:left}
+    .roles{grid-template-columns:1fr 1fr;gap:9px}
+    .role{padding:14px;min-height:74px}
+    .preview-placeholders,.candidates{grid-template-columns:1fr}
+    .contact-strip{align-items:flex-start;flex-direction:column}
+    footer{flex-direction:column}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto!important;transition:none!important}
+  }
+</style>
 </head>
 <body>
-  <main class="page">
-    <header class="topbar">
-      <div class="logo">Baarak<span>u</span></div>
-      <div class="top-note">Global Staffing</div>
-    </header>
-
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker"><span class="dot"></span> Available talent. Ready now.</div>
-        <h1>Watch them first. Interview the one you want.</h1>
-        <p>Meet vetted Baaraku talent before you ever speak to sales. Watch the short explainer, choose a skill set, preview currently available candidates, and book an interview directly.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#available-talent">See available talent ↓</a>
-          <a class="btn btn-secondary" href="https://calendly.com/baarakuhr/candidate-interview" target="_blank" rel="noopener">Book a Calendly call</a>
-        </div>
-        <div class="hero-note">You can book an interview this week with any candidate shown as available below.</div>
-      </div>
-
-      <div class="hero-video-card">
-        <div class="hero-video" id="hero-video-wrap">
-          <div class="video-placeholder" id="hero-placeholder">
-            <div class="video-placeholder-inner">
-              <strong>Baaraku explainer video</strong>
-              <span>Paste your YouTube video URL in <b>CONFIG.aboutVideo</b>. The video will play directly here.</span>
-            </div>
-          </div>
-          <iframe id="hero-video-frame" class="hidden" title="How Baaraku works" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-        </div>
-        <div class="video-caption"><span>How Baaraku works</span><span>Watch → Pick → Interview</span></div>
-      </div>
-    </section>
-
-    <div class="availability-strip">
-      <strong>Book a meeting this week with available Baaraku talent.</strong>
-      <span>No discovery call required. Pick the person you want to meet.</span>
+<div class="page">
+  <header class="topbar">
+    <div>
+      <div class="brand">Baarak<span>u</span></div>
+      <div class="brand-sub">Global Staffing</div>
     </div>
+    <a class="phone-link" href="tel:+13252744462">325-274-4462</a>
+  </header>
 
-    <section class="talent-section" id="available-talent" aria-labelledby="talent-heading">
-      <div class="section-head">
-        <div class="section-title">
-          <h2 id="talent-heading">Choose a skill set.</h2>
-          <p>Click a role to preview six currently available candidates — three per row on desktop.</p>
+  <main>
+    <section class="hero" aria-label="Baaraku explainer video">
+      <div class="video-shell">
+        <iframe id="hero-video-frame" class="hidden" title="How Baaraku works" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+        <div id="hero-placeholder" class="hero-placeholder">
+          <div class="hero-placeholder-inner">
+            <div class="play">▶</div>
+            <strong>Your explainer video goes here.</strong>
+            <p>Paste the YouTube link into the configuration and this full-width banner becomes the first thing every visitor sees.</p>
+          </div>
         </div>
-        <div class="section-badge">Live availability</div>
       </div>
-
-      <div class="roles" id="roles"></div>
-      <div id="state">
-        <div class="status-box">Select a role above to load currently available candidate videos.</div>
-        <div class="preview-placeholders"><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div></div>
-      </div>
-      <div id="candidates" class="candidates" aria-live="polite"></div>
     </section>
 
-    <section class="contact-strip" aria-label="Baaraku inquiries">
-      <div><strong>Need help choosing the right candidate?</strong><p>Talk to the Baaraku team and we’ll help you find the right fit.</p></div>
+    <section class="statement">
+      <div class="eyebrow">Watch them first. Interview the one you want.</div>
+      <h1>Interview the candidate of your choice this week.</h1>
+      <p>Pick the role you want to fill. Watch introductions from candidates who are currently available. When someone feels right, book a direct interview.</p>
+      <div class="cta-line"><span>Pick a role.</span> Watch. Choose. Book.</div>
+    </section>
+
+    <section class="roles-section" id="available-talent">
+      <div class="section-title">
+        <h2>What role are you hiring for?</h2>
+        <p>Only candidates currently marked available — with videos you can actually view — are shown.</p>
+      </div>
+      <div class="roles" id="roles"></div>
+
+      <div class="gallery-wrap">
+        <div id="state">
+          <div class="status-box">Select a role above to load currently available candidate videos.</div>
+          <div class="preview-placeholders">
+            <div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div>
+          </div>
+        </div>
+        <div class="candidates" id="candidates"></div>
+      </div>
+    </section>
+
+    <section class="contact-strip">
+      <div>
+        <h3>Need help choosing?</h3>
+        <p>Call Baaraku and we’ll help you find the right fit.</p>
+      </div>
       <div class="contact-links">
         <a class="contact-link" href="tel:+13252744462">Call 325-274-4462</a>
-        <span class="contact-link">Email address coming soon</span>
       </div>
     </section>
-
-    <footer class="footer"><span>Baaraku — Global Staffing</span><span>Only publicly playable candidate videos are shown. Availability is synced from the live talent database.</span></footer>
   </main>
 
+  <footer>
+    <span>Baaraku — Global Staffing</span>
+    <span>Only available, publicly playable candidate videos are displayed.</span>
+  </footer>
+</div>
+
 <script>
+
 const CONFIG = {
   sheetId: '1nSa6S6ehDWMGT-zyoWQ3Jcd0RmWM6tWLtuXjFEwJn9Q',
   googleApiKey: '', // Optional fallback only. Do not expose an unrestricted key.
@@ -418,6 +583,7 @@ async function markShown(c,sheetName){
   try{await fetch(CONFIG.lastShownWriteEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sheet:sheetName,candidateId:c['CANDIDATE ID'],candidateName:c.NAME,shownAt:new Date().toISOString()})})}
   catch(e){console.warn('Last Shown writeback failed',e)}
 }
+
 </script>
 </body>
 </html>
