@@ -3,59 +3,170 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#111111" />
-  <title>Baaraku — Meet Your Next Hire</title>
+  <meta name="theme-color" content="#0c0c0c" />
+  <meta name="description" content="Meet available Baaraku talent, watch their video introductions, and book an interview directly." />
+  <title>Baaraku — Meet Available Talent</title>
   <style>
-    :root{--bg:#f7f7f5;--card:#fff;--ink:#111;--muted:#6b6b68;--line:#e7e7e2;--orange:#f7931a;--soft:#efefec;--radius:22px}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-    a{color:inherit} button{font:inherit}
-    .wrap{width:min(100%,760px);margin:auto;padding:20px 16px 64px}
-    .brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.logo{font-weight:900;font-size:22px;letter-spacing:-.5px}.logo span{color:var(--orange)}.eyebrow{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-    .hero{padding:20px 0 10px}.hero h1{font-size:clamp(38px,11vw,68px);line-height:.95;letter-spacing:-.055em;margin:0 0 16px;max-width:680px}.hero p{font-size:17px;line-height:1.55;color:var(--muted);margin:0 0 24px;max-width:560px}
-    .video-shell{aspect-ratio:16/9;background:#111;border-radius:var(--radius);overflow:hidden;border:1px solid #222;box-shadow:0 10px 40px rgba(0,0,0,.08)}.video-shell iframe{width:100%;height:100%;border:0}
-    .section{margin-top:34px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.section h2{font-size:24px;letter-spacing:-.03em;margin:0}.section small{color:var(--muted)}
-    .roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.role{appearance:none;border:1px solid var(--line);background:var(--card);padding:16px;border-radius:16px;text-align:left;font-weight:750;cursor:pointer;min-height:68px;transition:.15s ease}.role:hover,.role:focus-visible{border-color:#bbb;transform:translateY(-1px);outline:none}.role.active{background:#111;color:#fff;border-color:#111}.role span{display:block;font-size:12px;font-weight:500;opacity:.62;margin-top:4px}
-    #state{margin-top:18px}.status-box{padding:20px;border:1px dashed #cfcfca;border-radius:18px;color:var(--muted);background:rgba(255,255,255,.6);text-align:center}
-    .candidates{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}.candidate{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}.candidate-video{aspect-ratio:16/9;background:#111}.candidate-video iframe,.candidate-video video{width:100%;height:100%;border:0;object-fit:cover}.candidate-top{padding:16px 18px 10px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);background:#fafaf8}.candidate h3{font-size:23px;letter-spacing:-.035em;margin:0 0 6px}.candidate p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}.video-missing{aspect-ratio:16/9;background:var(--soft);display:grid;place-items:center;padding:22px;text-align:center;color:var(--muted);font-size:13px}.candidate-actions{padding:12px 18px 18px;display:grid;gap:10px}.book{display:block;text-align:center;text-decoration:none;background:var(--orange);color:#111;font-weight:850;padding:15px 16px;border-radius:14px}.book:hover,.book:focus-visible{filter:brightness(.97);outline:2px solid #111;outline-offset:2px}.secondary{font-size:13px;text-align:center;color:var(--muted)}.secondary a{text-underline-offset:3px}
-    .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.5}
+    :root{
+      --bg:#f4f3ef;
+      --surface:#ffffff;
+      --surface-2:#efeee9;
+      --ink:#0c0c0c;
+      --muted:#72716d;
+      --line:#deddd7;
+      --orange:#f7931a;
+      --orange-soft:#fff1df;
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --shadow:0 24px 70px rgba(18,18,16,.09);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+    button,a{font:inherit}
+    a{color:inherit}
+    .page{width:min(100%,1280px);margin:auto;padding:24px 22px 80px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:4px 0 28px}
+    .logo{font-size:26px;font-weight:900;letter-spacing:-.055em}.logo span{color:var(--orange)}
+    .top-note{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
+
+    .hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:42px;align-items:center;padding:42px 0 68px}
+    .hero-copy{max-width:610px}
+    .kicker{display:inline-flex;align-items:center;gap:8px;background:var(--orange-soft);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:22px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+    h1{font-size:clamp(48px,6.7vw,92px);line-height:.92;letter-spacing:-.065em;margin:0 0 22px;max-width:760px}
+    .hero-copy p{font-size:clamp(17px,2vw,22px);line-height:1.5;color:var(--muted);max-width:580px;margin:0 0 26px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:14px;padding:15px 19px;font-weight:850;border:1px solid transparent;transition:.16s ease;cursor:pointer}
+    .btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .btn-secondary{background:transparent;border-color:#c9c8c1;color:var(--ink)}
+    .hero-note{font-size:13px;color:var(--muted);margin-top:12px}
+
+    .hero-video-card{background:#111;border-radius:var(--radius-xl);padding:10px;box-shadow:var(--shadow);border:1px solid #222}
+    .hero-video{aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#171717,#050505);position:relative}
+    .hero-video iframe{width:100%;height:100%;border:0;display:block}
+    .video-placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:28px;color:#fff;background:radial-gradient(circle at 70% 20%,rgba(247,147,26,.22),transparent 35%),#101010}
+    .video-placeholder-inner{max-width:420px}.video-placeholder strong{display:block;font-size:22px;margin-bottom:8px}.video-placeholder span{color:#bdbdbd;font-size:14px;line-height:1.5}
+    .video-caption{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 8px 3px;color:#dadada;font-size:12px}
+
+    .availability-strip{display:flex;align-items:center;justify-content:space-between;gap:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin-bottom:58px}
+    .availability-strip strong{font-size:16px}.availability-strip span{color:var(--muted);font-size:14px}
+
+    .talent-section{scroll-margin-top:24px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
+    .section-title h2{font-size:clamp(34px,4vw,54px);letter-spacing:-.055em;margin:0 0 8px}.section-title p{margin:0;color:var(--muted);font-size:16px}
+    .section-badge{font-size:12px;color:var(--muted);white-space:nowrap}
+    .roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:28px}
+    .role{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.68);padding:18px 18px 17px;border-radius:18px;text-align:left;font-weight:850;cursor:pointer;transition:.16s ease;min-height:82px}
+    .role:hover,.role:focus-visible{outline:none;border-color:#a8a7a0;background:#fff;transform:translateY(-1px)}
+    .role.active{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.12)}
+    .role small{display:block;font-weight:500;font-size:12px;margin-top:6px;opacity:.62}
+
+    #state{margin:8px 0 18px}.status-box{padding:28px;border:1px dashed #c7c6c0;border-radius:20px;text-align:center;color:var(--muted);background:rgba(255,255,255,.42)}
+    .candidates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .candidate{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 10px 30px rgba(18,18,16,.04);display:flex;flex-direction:column;min-width:0}
+    .candidate-video{aspect-ratio:16/9;background:#0f0f0f;position:relative;overflow:hidden}
+    .candidate-video iframe,.candidate-video video{width:100%;height:100%;border:0;display:block;object-fit:cover}
+    .video-missing{aspect-ratio:16/9;background:var(--surface-2);display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:13px}
+    .candidate-body{padding:17px 18px 8px;flex:1}
+    .meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.pill{font-size:10px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);background:#fafaf8;text-transform:uppercase;letter-spacing:.05em}
+    .candidate h3{font-size:22px;letter-spacing:-.04em;margin:0 0 8px}.candidate p{font-size:13px;line-height:1.5;color:var(--muted);margin:0}
+    .candidate-actions{padding:12px 18px 18px;display:grid;gap:10px}.book{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;background:var(--orange);color:#111;font-weight:900;padding:14px;border-radius:13px;transition:.16s ease}.book:hover,.book:focus-visible{filter:brightness(.97);transform:translateY(-1px);outline:none}
+    .secondary{text-align:center;font-size:12px;color:var(--muted)}.secondary a{text-underline-offset:3px}
+    .pagination{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:10px 0 0}.pagination button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 15px;font-weight:700;cursor:pointer}.pagination button:disabled{opacity:.35;cursor:not-allowed}.pagination span{font-size:12px;color:var(--muted)}
+    .footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:12px}
+    .preview-placeholders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:18px}
+    .preview-placeholder{border:1px solid var(--line);background:rgba(255,255,255,.58);border-radius:22px;overflow:hidden}
+    .preview-screen{aspect-ratio:16/10;background:linear-gradient(135deg,#ecebe6,#f8f7f3);display:grid;place-items:center;color:#aaa;font-size:28px}
+    .preview-lines{padding:15px 16px 17px}
+    .preview-line{height:9px;border-radius:99px;background:#e8e7e2;margin-bottom:9px}
+    .preview-line.short{width:52%}
+    .contact-strip{margin-top:42px;padding:22px 24px;border:1px solid var(--line);border-radius:22px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:22px}
+    .contact-strip strong{display:block;font-size:17px;margin-bottom:4px}
+    .contact-strip p{margin:0;color:var(--muted);font-size:13px}
+    .contact-links{display:flex;gap:10px;flex-wrap:wrap}
+    .contact-link{display:inline-flex;align-items:center;min-height:42px;padding:0 15px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);font-weight:750;font-size:13px;background:#fafafa}
     .hidden{display:none!important}
-    @media(min-width:640px){.wrap{padding:28px 24px 80px}.roles{grid-template-columns:repeat(4,minmax(0,1fr))}.candidates{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(min-width:900px){.wrap{width:min(100%,1180px)}.candidates{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+    @media(max-width:980px){.hero{grid-template-columns:1fr;gap:28px;padding-top:24px}.hero-copy{max-width:760px}.roles{grid-template-columns:repeat(2,minmax(0,1fr))}.candidates{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-placeholders{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:640px){.page{padding:18px 15px 58px}.topbar{padding-bottom:12px}.top-note{font-size:10px}.hero{padding:22px 0 42px}.hero-actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.availability-strip{align-items:flex-start;flex-direction:column;margin-bottom:42px}.section-head{align-items:flex-start;flex-direction:column}.roles{grid-template-columns:1fr 1fr;gap:9px}.role{padding:15px;min-height:72px}.candidates{grid-template-columns:1fr}.preview-placeholders{grid-template-columns:1fr}.contact-strip{align-items:flex-start;flex-direction:column}.footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="brand"><div class="logo">Baarak<span>u</span></div><div class="eyebrow">Global staffing</div></header>
+  <main class="page">
+    <header class="topbar">
+      <div class="logo">Baarak<span>u</span></div>
+      <div class="top-note">Global Staffing</div>
+    </header>
 
     <section class="hero">
-      <h1>Meet the person. Skip the sales call.</h1>
-      <p>Choose a role, watch real candidate introductions, then book an interview with the person you want to meet.</p>
-      <div class="video-shell hidden" id="hero-video">
-        <!-- Add your Baaraku explainer video embed URL in CONFIG.aboutVideoEmbed below -->
-        <iframe id="hero-video-frame" src="" title="How Baaraku works" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="hero-copy">
+        <div class="kicker"><span class="dot"></span> Available talent. Ready now.</div>
+        <h1>Watch them first. Interview the one you want.</h1>
+        <p>Meet vetted Baaraku talent before you ever speak to sales. Watch the short explainer, choose a skill set, preview currently available candidates, and book an interview directly.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#available-talent">See available talent ↓</a>
+          <a class="btn btn-secondary" href="https://calendly.com/baarakuhr/candidate-interview" target="_blank" rel="noopener">Book a Calendly call</a>
+        </div>
+        <div class="hero-note">You can book an interview this week with any candidate shown as available below.</div>
+      </div>
+
+      <div class="hero-video-card">
+        <div class="hero-video" id="hero-video-wrap">
+          <div class="video-placeholder" id="hero-placeholder">
+            <div class="video-placeholder-inner">
+              <strong>Baaraku explainer video</strong>
+              <span>Paste your YouTube video URL in <b>CONFIG.aboutVideo</b>. The video will play directly here.</span>
+            </div>
+          </div>
+          <iframe id="hero-video-frame" class="hidden" title="How Baaraku works" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+        </div>
+        <div class="video-caption"><span>How Baaraku works</span><span>Watch → Pick → Interview</span></div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="roles-heading">
-      <div class="section-head"><div><h2 id="roles-heading">Who do you need?</h2><small>Tap a role to watch all available candidates.</small></div></div>
+    <div class="availability-strip">
+      <strong>Book a meeting this week with available Baaraku talent.</strong>
+      <span>No discovery call required. Pick the person you want to meet.</span>
+    </div>
+
+    <section class="talent-section" id="available-talent" aria-labelledby="talent-heading">
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="talent-heading">Choose a skill set.</h2>
+          <p>Click a role to preview six currently available candidates — three per row on desktop.</p>
+        </div>
+        <div class="section-badge">Live availability</div>
+      </div>
+
       <div class="roles" id="roles"></div>
-      <div id="state"><div class="status-box">Select a role to see available candidates.</div></div>
+      <div id="state">
+        <div class="status-box">Select a role above to load currently available candidate videos.</div>
+        <div class="preview-placeholders"><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div><div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div></div>
+      </div>
       <div id="candidates" class="candidates" aria-live="polite"></div>
     </section>
 
-    <footer class="foot">Candidate availability is live. Choose a role to watch every currently available candidate directly on this page.</footer>
+    <section class="contact-strip" aria-label="Baaraku inquiries">
+      <div><strong>Need help choosing the right candidate?</strong><p>Talk to the Baaraku team and we’ll help you find the right fit.</p></div>
+      <div class="contact-links">
+        <a class="contact-link" href="tel:+13252744462">Call 325-274-4462</a>
+        <span class="contact-link">Email address coming soon</span>
+      </div>
+    </section>
+
+    <footer class="footer"><span>Baaraku — Global Staffing</span><span>Candidate availability is synced from the live talent database.</span></footer>
   </main>
 
 <script>
 const CONFIG = {
   sheetId: '1nSa6S6ehDWMGT-zyoWQ3Jcd0RmWM6tWLtuXjFEwJn9Q',
-  // IMPORTANT: rotate the API key previously shared in chat, then paste the replacement browser key here.
-  googleApiKey: 'PASTE_ROTATED_GOOGLE_SHEETS_API_KEY_HERE',
+  googleApiKey: '', // Optional fallback only. Do not expose an unrestricted key.
   calendlyBase: 'https://calendly.com/baarakuhr/candidate-interview',
-  // Optional secure server/Apps Script endpoint that writes LAST SHOWN back to the sheet.
-  lastShownWriteEndpoint: 'PASTE_LAST_SHOWN_WRITE_ENDPOINT_HERE',
-  aboutVideoEmbed: '',
+  lastShownWriteEndpoint: '',
+  aboutVideo: 'PASTE_YOUTUBE_URL_HERE', // Example: https://www.youtube.com/watch?v=XXXXXXXXXXX
   candidatesPerPage: 6,
 };
 
@@ -73,140 +184,135 @@ const ROLE_MAP = [
 const rolesEl = document.getElementById('roles');
 const candidatesEl = document.getElementById('candidates');
 const stateEl = document.getElementById('state');
-const heroVideo = document.getElementById('hero-video');
-const heroVideoFrame = document.getElementById('hero-video-frame');
-if(CONFIG.aboutVideoEmbed){ heroVideoFrame.src = CONFIG.aboutVideoEmbed; heroVideo.classList.remove('hidden'); }
+const heroFrame = document.getElementById('hero-video-frame');
+const heroPlaceholder = document.getElementById('hero-placeholder');
 
-let currentAvailable = [];
-let currentRole = null;
-let currentSheet = null;
-let currentPage = 0;
+let currentAvailable=[];
+let currentRole=null;
+let currentSheet=null;
+let currentPage=0;
 
-ROLE_MAP.forEach((r,i)=>{
-  const b=document.createElement('button'); b.className='role'; b.type='button'; b.dataset.sheet=r.sheet;
-  b.innerHTML=`${r.label}<span>View candidates</span>`; b.addEventListener('click',()=>loadRole(r,b)); rolesEl.appendChild(b);
-});
+function normalizeHeader(s=''){return String(s).trim().toUpperCase()}
+function parseDate(v){if(!v)return 0;const t=Date.parse(v);return Number.isFinite(t)?t:0}
+function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function isUrl(v=''){try{new URL(v);return true}catch{return false}}
 
-function normalizeHeader(s=''){ return String(s).trim().toUpperCase(); }
-function parseDate(v){ if(!v) return 0; const t=Date.parse(v); return Number.isFinite(t)?t:0; }
-function esc(s=''){ return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
-function isUrl(v=''){ try{ new URL(v); return true }catch{return false} }
-
-function driveEmbed(url){
-  if(!url) return '';
-  const m=String(url).match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if(m) return `https://drive.google.com/file/d/${m[1]}/preview`;
-  if(/youtube\.com|youtu\.be/.test(url)) return url;
-  return isUrl(url)?url:'';
+function youtubeEmbed(url=''){
+  if(!url || url.includes('PASTE_YOUTUBE')) return '';
+  try{
+    const u=new URL(url);
+    let id='';
+    if(u.hostname.includes('youtu.be')) id=u.pathname.replace('/','').split('/')[0];
+    else if(u.hostname.includes('youtube.com')){
+      if(u.pathname.startsWith('/watch')) id=u.searchParams.get('v')||'';
+      else if(u.pathname.startsWith('/shorts/')) id=u.pathname.split('/shorts/')[1]?.split('/')[0]||'';
+      else if(u.pathname.startsWith('/embed/')) id=u.pathname.split('/embed/')[1]?.split('/')[0]||'';
+    }
+    return id?`https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`:'';
+  }catch{return ''}
 }
 
-function track(event, data={}){
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({event, ...data});
+function videoEmbed(url=''){
+  if(!url) return '';
+  const s=String(url).trim();
+  const drive=s.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
+  if(drive) return `https://drive.google.com/file/d/${drive[1]}/preview`;
+  const yt=youtubeEmbed(s); if(yt) return yt;
+  return isUrl(s)?s:'';
+}
+
+const aboutEmbed=youtubeEmbed(CONFIG.aboutVideo);
+if(aboutEmbed){heroFrame.src=aboutEmbed;heroFrame.classList.remove('hidden');heroPlaceholder.classList.add('hidden')}
+
+ROLE_MAP.forEach(r=>{
+  const b=document.createElement('button');
+  b.className='role';b.type='button';b.dataset.sheet=r.sheet;
+  b.innerHTML=`${esc(r.label)}<small>View available candidates</small>`;
+  b.addEventListener('click',()=>loadRole(r,b));rolesEl.appendChild(b);
+});
+
+function track(event,data={}){
+  window.dataLayer=window.dataLayer||[];
+  window.dataLayer.push({event,...data});
   window.dispatchEvent(new CustomEvent('baaraku-track',{detail:{event,...data}}));
 }
 
-async function loadRole(role, button){
-  document.querySelectorAll('.role').forEach(x=>x.classList.remove('active')); button.classList.add('active');
-  candidatesEl.innerHTML=''; stateEl.innerHTML='<div class="status-box">Finding available candidates…</div>';
+async function loadRole(role,button){
+  document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));
+  button.classList.add('active');candidatesEl.innerHTML='';
+  stateEl.innerHTML='<div class="status-box">Loading currently available candidates…</div>';
   try{
     const rows=await fetchSheet(role.sheet);
-    const available=rows.filter(r=>String(r.STATUS||'').trim().toUpperCase()==='AVAILABLE' && r.NAME)
+    const available=rows.filter(r=>String(r.STATUS||'').trim().toUpperCase()==='AVAILABLE'&&r.NAME&&videoEmbed(r.VIDEO||r['VIDEO LINK']||''))
       .sort((a,b)=>parseDate(a['LAST SHOWN'])-parseDate(b['LAST SHOWN']));
-    if(!available.length){ stateEl.innerHTML='<div class="status-box">No candidates are marked available in this role right now.</div>'; return; }
-    stateEl.innerHTML='';
-    currentAvailable = available;
-    currentRole = role.label;
-    currentSheet = role.sheet;
-    currentPage = 0;
+    if(!available.length){stateEl.innerHTML='<div class="status-box">No playable candidate videos are currently marked AVAILABLE for this role.</div>';return}
+    stateEl.innerHTML='';currentAvailable=available;currentRole=role.label;currentSheet=role.sheet;currentPage=0;
     renderCandidatePage();
+    candidatesEl.scrollIntoView({behavior:'smooth',block:'start'});
     track('role_candidates_loaded',{role:role.label,count:available.length});
   }catch(err){
-    console.error(err); stateEl.innerHTML='<div class="status-box"><strong>Candidates could not be loaded.</strong><br><span style="font-size:13px">Make sure the Google Sheet is shared as <b>Anyone with the link – Viewer</b>, then refresh this page.</span></div>';
+    console.error(err);
+    stateEl.innerHTML='<div class="status-box"><strong>Candidate videos could not be loaded.</strong><br><span style="font-size:13px">Please check that the Sheet is shared for viewing and that the candidate video cells contain valid Google Drive or YouTube links.</span></div>';
   }
 }
 
-
 function renderCandidatePage(){
   candidatesEl.innerHTML='';
-  const perPage = CONFIG.candidatesPerPage || 6;
-  const start = currentPage * perPage;
-  const page = currentAvailable.slice(start, start + perPage);
+  const perPage=CONFIG.candidatesPerPage||6;
+  const start=currentPage*perPage;
+  const page=currentAvailable.slice(start,start+perPage);
   page.forEach(c=>renderCandidate(c,currentRole));
   page.forEach(c=>markShown(c,currentSheet));
-
-  const totalPages = Math.ceil(currentAvailable.length / perPage);
-  if(totalPages > 1){
-    const nav = document.createElement('div');
-    nav.style.gridColumn='1 / -1';
-    nav.style.display='flex';
-    nav.style.justifyContent='center';
-    nav.style.alignItems='center';
-    nav.style.gap='10px';
-    nav.style.padding='8px 0 2px';
-    nav.innerHTML=`
-      <button type="button" class="role" id="prevCandidates" ${currentPage===0?'disabled':''} style="min-height:auto;padding:10px 16px;text-align:center;opacity:${currentPage===0?'.45':'1'}">Previous</button>
-      <span style="font-size:13px;color:var(--muted)">Showing ${start+1}–${Math.min(start+perPage,currentAvailable.length)} of ${currentAvailable.length}</span>
-      <button type="button" class="role" id="nextCandidates" ${currentPage>=totalPages-1?'disabled':''} style="min-height:auto;padding:10px 16px;text-align:center;opacity:${currentPage>=totalPages-1?'.45':'1'}">Next</button>`;
+  const totalPages=Math.ceil(currentAvailable.length/perPage);
+  if(totalPages>1){
+    const nav=document.createElement('div');nav.className='pagination';
+    nav.innerHTML=`<button type="button" id="prevCandidates" ${currentPage===0?'disabled':''}>Previous</button><span>${start+1}–${Math.min(start+perPage,currentAvailable.length)} of ${currentAvailable.length}</span><button type="button" id="nextCandidates" ${currentPage>=totalPages-1?'disabled':''}>Next</button>`;
     candidatesEl.appendChild(nav);
-    nav.querySelector('#prevCandidates').addEventListener('click',()=>{ if(currentPage>0){ currentPage--; renderCandidatePage(); candidatesEl.scrollIntoView({behavior:'smooth',block:'start'}); } });
-    nav.querySelector('#nextCandidates').addEventListener('click',()=>{ if(currentPage<totalPages-1){ currentPage++; renderCandidatePage(); candidatesEl.scrollIntoView({behavior:'smooth',block:'start'}); } });
+    nav.querySelector('#prevCandidates').addEventListener('click',()=>{if(currentPage>0){currentPage--;renderCandidatePage();candidatesEl.scrollIntoView({behavior:'smooth',block:'start'})}});
+    nav.querySelector('#nextCandidates').addEventListener('click',()=>{if(currentPage<totalPages-1){currentPage++;renderCandidatePage();candidatesEl.scrollIntoView({behavior:'smooth',block:'start'})}});
   }
 }
 
 function parseCSV(text){
-  const rows=[]; let row=[], cell='', q=false;
+  const rows=[];let row=[],cell='',q=false;
   for(let i=0;i<text.length;i++){
-    const ch=text[i], nx=text[i+1];
-    if(ch==='"'){
-      if(q && nx==='"'){ cell+='"'; i++; }
-      else q=!q;
-    }else if(ch===',' && !q){ row.push(cell); cell=''; }
-    else if((ch==='\n' || ch==='\r') && !q){
-      if(ch==='\r' && nx==='\n') i++;
-      row.push(cell); if(row.some(v=>v!=='')) rows.push(row); row=[]; cell='';
-    }else cell+=ch;
+    const ch=text[i],nx=text[i+1];
+    if(ch==='"'){if(q&&nx==='"'){cell+='"';i++}else q=!q}
+    else if(ch===','&&!q){row.push(cell);cell=''}
+    else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&nx==='\n')i++;row.push(cell);if(row.some(v=>v!==''))rows.push(row);row=[];cell=''}
+    else cell+=ch;
   }
-  if(cell!=='' || row.length){ row.push(cell); rows.push(row); }
+  if(cell!==''||row.length){row.push(cell);rows.push(row)}
   return rows;
 }
 
 async function fetchSheet(sheetName){
-  // First try Google's public CSV/Visualization feed. This avoids exposing an API key in the website.
   const publicUrl=`https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
   try{
     const res=await fetch(publicUrl,{cache:'no-store'});
     if(res.ok){
       const text=await res.text();
       const values=parseCSV(text);
-      if(values.length>=2){
-        const headers=values[0].map(normalizeHeader);
-        return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
-      }
+      if(values.length>=2){const headers=values[0].map(normalizeHeader);return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])))}
     }
-  }catch(e){ console.warn('Public Sheet feed failed',e); }
+  }catch(e){console.warn('Public Sheet feed failed',e)}
 
-  // Optional fallback: Sheets API, only if a restricted browser key is configured.
-  if(CONFIG.googleApiKey && !CONFIG.googleApiKey.includes('PASTE_')){
+  if(CONFIG.googleApiKey){
     const range=`'${sheetName.replaceAll("'","''")}'!A:Z`;
     const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.sheetId}/values/${encodeURIComponent(range)}?majorDimension=ROWS&key=${encodeURIComponent(CONFIG.googleApiKey)}`;
     const res=await fetch(url);
-    if(res.ok){
-      const json=await res.json(); const values=json.values||[];
-      if(values.length>=2){
-        const headers=values[0].map(normalizeHeader);
-        return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
-      }
-    }
+    if(res.ok){const json=await res.json();const values=json.values||[];if(values.length>=2){const headers=values[0].map(normalizeHeader);return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])))}}
   }
-  throw new Error('Candidate Sheet could not be read. Make sure the Google Sheet is shared as Anyone with the link – Viewer.');
+  throw new Error('Candidate Sheet could not be read');
 }
 
-function renderCandidate(c, roleLabel){
-  const id=c['CANDIDATE ID']||''; const name=c.NAME||'Candidate';
-  const video=c.VIDEO||c['VIDEO LINK']||''; const cv=c.CV||c['CV LINK']||'';
+function renderCandidate(c,roleLabel){
+  const id=c['CANDIDATE ID']||'';
+  const name=c.NAME||'Candidate';
+  const video=c.VIDEO||c['VIDEO LINK']||'';
+  const cv=c.CV||c['CV LINK']||'';
   const notes=c.NOTES||c.PORTFOLIO||c['NOTES / PORTFOLIO']||'';
-  const embed=driveEmbed(video);
+  const embed=videoEmbed(video);
   const calendly=new URL(CONFIG.calendlyBase);
   calendly.searchParams.set('utm_source','baaraku_website');
   calendly.searchParams.set('utm_medium','candidate_profile');
@@ -214,16 +320,16 @@ function renderCandidate(c, roleLabel){
   calendly.searchParams.set('utm_content',name);
   calendly.searchParams.set('utm_term',roleLabel);
 
-  const card=document.createElement('article'); card.className='candidate';
+  const card=document.createElement('article');card.className='candidate';
   card.innerHTML=`
-    ${embed?`<div class="candidate-video"><iframe src="${esc(embed)}" title="Video introduction from ${esc(name)}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`:`<div class="video-missing">Video preview is not available yet for this candidate.</div>`}
-    <div class="candidate-top">
+    <div class="candidate-video"><iframe src="${esc(embed)}" title="Video introduction from ${esc(name)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+    <div class="candidate-body">
       <div class="meta"><span class="pill">${esc(roleLabel)}</span>${id?`<span class="pill">${esc(id)}</span>`:''}</div>
       <h3>${esc(name)}</h3>
       ${notes?`<p>${esc(notes)}</p>`:'<p>Watch the introduction, then book a direct interview.</p>'}
     </div>
     <div class="candidate-actions">
-      <a class="book" href="${esc(calendly.toString())}" target="_blank" rel="noopener" data-book>Book interview with this candidate</a>
+      <a class="book" href="${esc(calendly.toString())}" target="_blank" rel="noopener" data-book>Book a Calendly interview</a>
       ${isUrl(cv)?`<div class="secondary"><a href="${esc(cv)}" target="_blank" rel="noopener">View CV</a></div>`:''}
     </div>`;
   candidatesEl.appendChild(card);
@@ -232,10 +338,9 @@ function renderCandidate(c, roleLabel){
 }
 
 async function markShown(c,sheetName){
-  if(!CONFIG.lastShownWriteEndpoint || CONFIG.lastShownWriteEndpoint.includes('PASTE_')) return;
-  try{
-    await fetch(CONFIG.lastShownWriteEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sheet:sheetName,candidateId:c['CANDIDATE ID'],candidateName:c.NAME,shownAt:new Date().toISOString()})});
-  }catch(e){ console.warn('Last Shown writeback failed',e); }
+  if(!CONFIG.lastShownWriteEndpoint)return;
+  try{await fetch(CONFIG.lastShownWriteEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sheet:sheetName,candidateId:c['CANDIDATE ID'],candidateName:c.NAME,shownAt:new Date().toISOString()})})}
+  catch(e){console.warn('Last Shown writeback failed',e)}
 }
 </script>
 </body>
