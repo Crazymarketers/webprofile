@@ -56,7 +56,8 @@ header{display:flex;justify-content:space-between;align-items:flex-start;padding
 .role.active::after{content:'Showing candidates ↓';color:var(--ink)}
 
 .gallery-wrap{margin-top:34px}
-.status-box{padding:20px 0;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}
+.gallery-cue{font-size:12px;font-weight:850;letter-spacing:.03em;color:var(--ink);margin-bottom:4px}
+.status-box{padding:14px 0;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}
 .preview-placeholders,.candidates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:24px}
 .preview-placeholder{border-top:1px solid var(--line);padding-top:12px}
 .preview-screen{aspect-ratio:16/10;background:linear-gradient(135deg,#ece9e2,#f7f5f0);display:grid;place-items:center;font-size:30px;color:#a5a5a5}
@@ -64,17 +65,60 @@ header{display:flex;justify-content:space-between;align-items:flex-start;padding
 .preview-line{height:8px;border-radius:999px;background:#e9e6df;margin-bottom:8px}
 .preview-line.short{width:48%}
 
-.candidate{border-top:1px solid var(--line);padding-top:12px}
+.candidate{
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(0,0,0,.035);
+}
 .candidate-video{aspect-ratio:16/10;background:#111;overflow:hidden}
 .candidate-video iframe{width:100%;height:100%;border:0;display:block}
-.candidate-copy{padding:16px 0 10px}
+.candidate-copy{padding:18px 18px 0}
 .candidate-topline{display:flex;justify-content:space-between;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#989898;font-weight:800}
-.candidate h3{font-size:27px;letter-spacing:-.045em;margin:10px 0 0}
-.candidate p{color:var(--muted);font-size:13px;line-height:1.55;margin:8px 0 0;min-height:40px}
-.candidate-links{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.book{text-decoration:none;font-weight:900;font-size:13px}
-.book:hover{color:var(--orange)}
-.cv-link{font-size:11px;color:var(--muted);text-decoration:none;font-weight:700}
+.candidate h3{font-size:28px;letter-spacing:-.045em;margin:10px 0 0}
+.candidate p{color:var(--muted);font-size:13px;line-height:1.55;margin:8px 0 18px;min-height:40px}
+.candidate-action{
+  margin-top:2px;
+  padding:16px 18px 18px;
+  background:#faf9f6;
+  border-top:1px solid var(--line);
+}
+.candidate-action-label{
+  display:block;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#8c8c8c;
+  font-weight:850;
+  margin-bottom:9px;
+}
+.book{
+  display:flex;
+  width:100%;
+  min-height:50px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 16px;
+  border-radius:12px;
+  background:var(--ink);
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+  font-size:14px;
+  transition:transform .16s ease,background .16s ease;
+}
+.book::after{content:'→';font-size:18px;color:var(--orange)}
+.book:hover{background:#1b1b1b;transform:translateY(-1px)}
+.cv-link{
+  display:inline-block;
+  margin-top:10px;
+  font-size:11px;
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:750
+}
 .cv-link:hover{color:var(--ink)}
 .pagination{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:14px;padding-top:16px;color:var(--muted);font-size:12px}
 .pagination button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer}
@@ -147,6 +191,7 @@ footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);display
     <div class="roles" id="roles"></div>
 
     <div class="gallery-wrap">
+      <div class="gallery-cue">Watch first. Book only when you see the right fit.</div>
       <div id="state">
         <div class="status-box">Choose a role to see candidates who are available now.</div>
         <div class="preview-placeholders">
@@ -380,7 +425,8 @@ async function loadRole(role,button){
       stateEl.innerHTML='<div class="status-box"><strong>No publicly playable candidate videos are available for this role.</strong><br><span style="font-size:13px">Only candidates marked AVAILABLE whose video can be viewed without requesting access are shown.</span></div>';
       return;
     }
-    stateEl.innerHTML='';currentAvailable=available;currentRole=role.label;currentSheet=role.sheet;currentPage=0;
+    stateEl.innerHTML=`<div class="status-box"><strong>${esc(available.length)} ${esc(role.label)} candidate${available.length===1?'':'s'} available now.</strong><br><span style="font-size:12px">Watch a video. If someone feels right, use the interview button on their card.</span></div>`;
+    currentAvailable=available;currentRole=role.label;currentSheet=role.sheet;currentPage=0;
     renderCandidatePage();
     candidatesEl.scrollIntoView({behavior:'smooth',block:'start'});
     track('role_candidates_loaded',{role:role.label,count:available.length});
@@ -461,10 +507,12 @@ function renderCandidate(c,roleLabel){
       <div class="candidate-topline"><span>${esc(roleLabel)}</span>${id?`<span>${esc(id)}</span>`:''}</div>
       <h3>${esc(name)}</h3>
       ${notes?`<p>${esc(notes)}</p>`:'<p>Watch the introduction. If the fit feels right, book a direct interview.</p>'}
-      <div class="candidate-links">
-        <a class="book" href="${esc(calendly.toString())}" target="_blank" rel="noopener" data-book>Meet ${esc(name)} →</a>
-        ${isUrl(cv)?`<a class="cv-link" href="${esc(cv)}" target="_blank" rel="noopener">View CV</a>`:''}
-      </div>
+    </div>
+    <div class="candidate-action">
+      <span class="candidate-action-label">Ready to meet them?</span>
+      <a class="book" href="${esc(calendly.toString())}" target="_blank" rel="noopener" data-book>Interview ${esc(name)} this week</a>
+      ${isUrl(cv)?`<a class="cv-link" href="${esc(cv)}" target="_blank" rel="noopener">View CV before booking</a>`:''}
+    </div>
     </div>`;
   candidatesEl.appendChild(card);
   track('candidate_profile_view',{candidate_id:id,candidate_name:name,role:roleLabel});
