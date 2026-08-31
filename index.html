@@ -16,10 +16,11 @@
     .section{margin-top:34px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.section h2{font-size:24px;letter-spacing:-.03em;margin:0}.section small{color:var(--muted)}
     .roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.role{appearance:none;border:1px solid var(--line);background:var(--card);padding:16px;border-radius:16px;text-align:left;font-weight:750;cursor:pointer;min-height:68px;transition:.15s ease}.role:hover,.role:focus-visible{border-color:#bbb;transform:translateY(-1px);outline:none}.role.active{background:#111;color:#fff;border-color:#111}.role span{display:block;font-size:12px;font-weight:500;opacity:.62;margin-top:4px}
     #state{margin-top:18px}.status-box{padding:20px;border:1px dashed #cfcfca;border-radius:18px;color:var(--muted);background:rgba(255,255,255,.6);text-align:center}
-    .candidates{display:grid;gap:16px;margin-top:18px}.candidate{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}.candidate-video{aspect-ratio:16/9;background:#111}.candidate-video iframe,.candidate-video video{width:100%;height:100%;border:0;object-fit:cover}.candidate-top{padding:16px 18px 10px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);background:#fafaf8}.candidate h3{font-size:23px;letter-spacing:-.035em;margin:0 0 6px}.candidate p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}.video-missing{aspect-ratio:16/9;background:var(--soft);display:grid;place-items:center;padding:22px;text-align:center;color:var(--muted);font-size:13px}.candidate-actions{padding:12px 18px 18px;display:grid;gap:10px}.book{display:block;text-align:center;text-decoration:none;background:var(--orange);color:#111;font-weight:850;padding:15px 16px;border-radius:14px}.book:hover,.book:focus-visible{filter:brightness(.97);outline:2px solid #111;outline-offset:2px}.secondary{font-size:13px;text-align:center;color:var(--muted)}.secondary a{text-underline-offset:3px}
+    .candidates{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}.candidate{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}.candidate-video{aspect-ratio:16/9;background:#111}.candidate-video iframe,.candidate-video video{width:100%;height:100%;border:0;object-fit:cover}.candidate-top{padding:16px 18px 10px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);background:#fafaf8}.candidate h3{font-size:23px;letter-spacing:-.035em;margin:0 0 6px}.candidate p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}.video-missing{aspect-ratio:16/9;background:var(--soft);display:grid;place-items:center;padding:22px;text-align:center;color:var(--muted);font-size:13px}.candidate-actions{padding:12px 18px 18px;display:grid;gap:10px}.book{display:block;text-align:center;text-decoration:none;background:var(--orange);color:#111;font-weight:850;padding:15px 16px;border-radius:14px}.book:hover,.book:focus-visible{filter:brightness(.97);outline:2px solid #111;outline-offset:2px}.secondary{font-size:13px;text-align:center;color:var(--muted)}.secondary a{text-underline-offset:3px}
     .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.5}
     .hidden{display:none!important}
     @media(min-width:640px){.wrap{padding:28px 24px 80px}.roles{grid-template-columns:repeat(4,minmax(0,1fr))}.candidates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(min-width:900px){.wrap{width:min(100%,1180px)}.candidates{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
   </style>
 </head>
@@ -30,9 +31,9 @@
     <section class="hero">
       <h1>Meet the person. Skip the sales call.</h1>
       <p>Choose a role, watch real candidate introductions, then book an interview with the person you want to meet.</p>
-      <div class="video-shell">
-        <!-- Replace with your Baaraku explainer video embed URL -->
-        <iframe src="ABOUT_BAARAKU_VIDEO_EMBED_URL" title="How Baaraku works" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-shell hidden" id="hero-video">
+        <!-- Add your Baaraku explainer video embed URL in CONFIG.aboutVideoEmbed below -->
+        <iframe id="hero-video-frame" src="" title="How Baaraku works" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -54,6 +55,8 @@ const CONFIG = {
   calendlyBase: 'https://calendly.com/baarakuhr/candidate-interview',
   // Optional secure server/Apps Script endpoint that writes LAST SHOWN back to the sheet.
   lastShownWriteEndpoint: 'PASTE_LAST_SHOWN_WRITE_ENDPOINT_HERE',
+  aboutVideoEmbed: '',
+  candidatesPerPage: 6,
 };
 
 const ROLE_MAP = [
@@ -70,6 +73,14 @@ const ROLE_MAP = [
 const rolesEl = document.getElementById('roles');
 const candidatesEl = document.getElementById('candidates');
 const stateEl = document.getElementById('state');
+const heroVideo = document.getElementById('hero-video');
+const heroVideoFrame = document.getElementById('hero-video-frame');
+if(CONFIG.aboutVideoEmbed){ heroVideoFrame.src = CONFIG.aboutVideoEmbed; heroVideo.classList.remove('hidden'); }
+
+let currentAvailable = [];
+let currentRole = null;
+let currentSheet = null;
+let currentPage = 0;
 
 ROLE_MAP.forEach((r,i)=>{
   const b=document.createElement('button'); b.className='role'; b.type='button'; b.dataset.sheet=r.sheet;
@@ -104,22 +115,91 @@ async function loadRole(role, button){
       .sort((a,b)=>parseDate(a['LAST SHOWN'])-parseDate(b['LAST SHOWN']));
     if(!available.length){ stateEl.innerHTML='<div class="status-box">No candidates are marked available in this role right now.</div>'; return; }
     stateEl.innerHTML='';
-    available.forEach(c=>renderCandidate(c,role.label));
-    available.forEach(c=>markShown(c,role.sheet));
+    currentAvailable = available;
+    currentRole = role.label;
+    currentSheet = role.sheet;
+    currentPage = 0;
+    renderCandidatePage();
     track('role_candidates_loaded',{role:role.label,count:available.length});
   }catch(err){
-    console.error(err); stateEl.innerHTML='<div class="status-box">We couldn’t load candidates right now. Please try again shortly.</div>';
+    console.error(err); stateEl.innerHTML='<div class="status-box"><strong>Candidates could not be loaded.</strong><br><span style="font-size:13px">Make sure the Google Sheet is shared as <b>Anyone with the link – Viewer</b>, then refresh this page.</span></div>';
   }
 }
 
+
+function renderCandidatePage(){
+  candidatesEl.innerHTML='';
+  const perPage = CONFIG.candidatesPerPage || 6;
+  const start = currentPage * perPage;
+  const page = currentAvailable.slice(start, start + perPage);
+  page.forEach(c=>renderCandidate(c,currentRole));
+  page.forEach(c=>markShown(c,currentSheet));
+
+  const totalPages = Math.ceil(currentAvailable.length / perPage);
+  if(totalPages > 1){
+    const nav = document.createElement('div');
+    nav.style.gridColumn='1 / -1';
+    nav.style.display='flex';
+    nav.style.justifyContent='center';
+    nav.style.alignItems='center';
+    nav.style.gap='10px';
+    nav.style.padding='8px 0 2px';
+    nav.innerHTML=`
+      <button type="button" class="role" id="prevCandidates" ${currentPage===0?'disabled':''} style="min-height:auto;padding:10px 16px;text-align:center;opacity:${currentPage===0?'.45':'1'}">Previous</button>
+      <span style="font-size:13px;color:var(--muted)">Showing ${start+1}–${Math.min(start+perPage,currentAvailable.length)} of ${currentAvailable.length}</span>
+      <button type="button" class="role" id="nextCandidates" ${currentPage>=totalPages-1?'disabled':''} style="min-height:auto;padding:10px 16px;text-align:center;opacity:${currentPage>=totalPages-1?'.45':'1'}">Next</button>`;
+    candidatesEl.appendChild(nav);
+    nav.querySelector('#prevCandidates').addEventListener('click',()=>{ if(currentPage>0){ currentPage--; renderCandidatePage(); candidatesEl.scrollIntoView({behavior:'smooth',block:'start'}); } });
+    nav.querySelector('#nextCandidates').addEventListener('click',()=>{ if(currentPage<totalPages-1){ currentPage++; renderCandidatePage(); candidatesEl.scrollIntoView({behavior:'smooth',block:'start'}); } });
+  }
+}
+
+function parseCSV(text){
+  const rows=[]; let row=[], cell='', q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], nx=text[i+1];
+    if(ch==='"'){
+      if(q && nx==='"'){ cell+='"'; i++; }
+      else q=!q;
+    }else if(ch===',' && !q){ row.push(cell); cell=''; }
+    else if((ch==='\n' || ch==='\r') && !q){
+      if(ch==='\r' && nx==='\n') i++;
+      row.push(cell); if(row.some(v=>v!=='')) rows.push(row); row=[]; cell='';
+    }else cell+=ch;
+  }
+  if(cell!=='' || row.length){ row.push(cell); rows.push(row); }
+  return rows;
+}
+
 async function fetchSheet(sheetName){
-  if(!CONFIG.googleApiKey || CONFIG.googleApiKey.includes('PASTE_')) throw new Error('Google API key missing');
-  const range=`'${sheetName.replaceAll("'","''")}'!A:Z`;
-  const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.sheetId}/values/${encodeURIComponent(range)}?majorDimension=ROWS&key=${encodeURIComponent(CONFIG.googleApiKey)}`;
-  const res=await fetch(url); if(!res.ok) throw new Error('Sheets API '+res.status);
-  const json=await res.json(); const values=json.values||[]; if(values.length<2) return [];
-  const headers=values[0].map(normalizeHeader);
-  return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
+  // First try Google's public CSV/Visualization feed. This avoids exposing an API key in the website.
+  const publicUrl=`https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+  try{
+    const res=await fetch(publicUrl,{cache:'no-store'});
+    if(res.ok){
+      const text=await res.text();
+      const values=parseCSV(text);
+      if(values.length>=2){
+        const headers=values[0].map(normalizeHeader);
+        return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
+      }
+    }
+  }catch(e){ console.warn('Public Sheet feed failed',e); }
+
+  // Optional fallback: Sheets API, only if a restricted browser key is configured.
+  if(CONFIG.googleApiKey && !CONFIG.googleApiKey.includes('PASTE_')){
+    const range=`'${sheetName.replaceAll("'","''")}'!A:Z`;
+    const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.sheetId}/values/${encodeURIComponent(range)}?majorDimension=ROWS&key=${encodeURIComponent(CONFIG.googleApiKey)}`;
+    const res=await fetch(url);
+    if(res.ok){
+      const json=await res.json(); const values=json.values||[];
+      if(values.length>=2){
+        const headers=values[0].map(normalizeHeader);
+        return values.slice(1).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
+      }
+    }
+  }
+  throw new Error('Candidate Sheet could not be read. Make sure the Google Sheet is shared as Anyone with the link – Viewer.');
 }
 
 function renderCandidate(c, roleLabel){
