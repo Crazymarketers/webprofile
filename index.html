@@ -111,27 +111,71 @@
   .section-title{text-align:center;margin-bottom:22px}
   .section-title h2{margin:0;font-size:28px;letter-spacing:-.035em}
   .section-title p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .journey{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:20px;
+    overflow:hidden;
+    margin:0 auto 54px;
+    max-width:920px;
+  }
+  .journey-step{background:#fff;padding:20px 22px}
+  .journey-step b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;margin-bottom:8px}
+  .journey-step span{font-size:15px;font-weight:780}
   .roles{
     display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:12px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
   }
   .role{
     appearance:none;
-    border:1px solid var(--line);
+    border:1px solid #dedbd4;
     background:#fff;
     color:var(--ink);
-    border-radius:18px;
-    padding:18px;
-    min-height:82px;
+    border-radius:22px;
+    padding:26px 26px 24px;
+    min-height:132px;
     text-align:left;
     cursor:pointer;
-    transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease;
-    font-weight:800;
+    transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease,background .18s ease;
+    position:relative;
+    overflow:hidden;
   }
-  .role small{display:block;font-size:11px;color:var(--muted);margin-top:5px;font-weight:600}
-  .role:hover{transform:translateY(-2px);border-color:#cbc7bf;box-shadow:0 10px 26px rgba(0,0,0,.05)}
-  .role.active{border-color:#1a1a1a;box-shadow:inset 0 0 0 1px #1a1a1a}
+  .role::after{
+    content:'→';
+    position:absolute;
+    right:24px;
+    bottom:21px;
+    font-size:22px;
+    color:#aaa;
+    transition:transform .18s ease,color .18s ease;
+  }
+  .role .role-kicker{
+    display:block;
+    font-size:10px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:#999;
+    font-weight:800;
+    margin-bottom:15px;
+  }
+  .role .role-title{
+    display:block;
+    font-size:22px;
+    line-height:1.12;
+    letter-spacing:-.035em;
+    font-weight:850;
+    max-width:80%;
+  }
+  .role small{display:block;font-size:12px;color:var(--muted);margin-top:10px;font-weight:600}
+  .role:hover{transform:translateY(-2px);border-color:#aaa59b;box-shadow:0 14px 34px rgba(0,0,0,.055)}
+  .role:hover::after{transform:translateX(4px);color:var(--ink)}
+  .role.active{background:#111;color:#fff;border-color:#111;box-shadow:0 16px 38px rgba(0,0,0,.12)}
+  .role.active .role-kicker,.role.active small{color:#bdbdbd}
+  .role.active::after{color:var(--orange)}
 
   .gallery-wrap{margin-top:28px}
   .status-box{
@@ -247,8 +291,11 @@
     .statement{margin:26px auto 40px;text-align:left}
     .statement p{margin-left:0;margin-right:0}
     .section-title{text-align:left}
-    .roles{grid-template-columns:1fr 1fr;gap:9px}
-    .role{padding:14px;min-height:74px}
+    .journey{grid-template-columns:1fr;margin-bottom:38px}
+    .journey-step{padding:16px 18px}
+    .roles{grid-template-columns:1fr;gap:10px}
+    .role{padding:21px 20px;min-height:112px}
+    .role .role-title{font-size:20px}
     .preview-placeholders,.candidates{grid-template-columns:1fr}
     .contact-strip{align-items:flex-start;flex-direction:column}
     footer{flex-direction:column}
@@ -289,10 +336,16 @@
       <div class="cta-line"><span>Pick a role.</span> Watch. Choose. Book.</div>
     </section>
 
+    <section class="journey" aria-label="How it works">
+      <div class="journey-step"><b>01 · Pick</b><span>Choose the role you need.</span></div>
+      <div class="journey-step"><b>02 · Watch</b><span>Meet available candidates on video.</span></div>
+      <div class="journey-step"><b>03 · Interview</b><span>Book the person you want this week.</span></div>
+    </section>
+
     <section class="roles-section" id="available-talent">
       <div class="section-title">
-        <h2>What role are you hiring for?</h2>
-        <p>Only candidates currently marked available — with videos you can actually view — are shown.</p>
+        <h2>Start with the role.</h2>
+        <p>Choose what you need. We’ll show you only the candidates who are available right now.</p>
       </div>
       <div class="roles" id="roles"></div>
 
@@ -335,16 +388,8 @@ const CONFIG = {
   candidatesPerPage: 6,
 };
 
-const ROLE_MAP = [
-  {label:'Medical VA', sheet:'Medical Virtual Assistant'},
-  {label:'Executive VA', sheet:'Executive Virtual Assistant'},
-  {label:'Social Media', sheet:'Social Media Manager'},
-  {label:'Digital Marketing', sheet:'Digital Marketer'},
-  {label:'Tech Talent', sheet:'Tech Roles'},
-  {label:'Legal Support', sheet:'Legal Support'},
-  {label:'Insurance Caller', sheet:'Insurance Cold Callers'},
-  {label:'Accounting VA', sheet:'Accounting Virtual Assistant'}
-];
+const ROLE_CONFIG_SHEET = 'WEBSITE ROLES';
+const SHEET_CACHE = new Map();
 
 const rolesEl = document.getElementById('roles');
 const candidatesEl = document.getElementById('candidates');
@@ -451,12 +496,61 @@ async function getPlayableEmbed(url=''){
 const aboutEmbed=youtubeEmbed(CONFIG.aboutVideo);
 if(aboutEmbed){heroFrame.src=aboutEmbed;heroFrame.classList.remove('hidden');heroPlaceholder.classList.add('hidden')}
 
-ROLE_MAP.forEach(r=>{
-  const b=document.createElement('button');
-  b.className='role';b.type='button';b.dataset.sheet=r.sheet;
-  b.innerHTML=`${esc(r.label)}<small>View available candidates</small>`;
-  b.addEventListener('click',()=>loadRole(r,b));rolesEl.appendChild(b);
-});
+async function initRoles(){
+  rolesEl.innerHTML='';
+  stateEl.innerHTML='<div class="status-box">Loading available roles…</div>';
+
+  try{
+    const rows=await fetchSheet(ROLE_CONFIG_SHEET);
+    const configured=rows
+      .filter(r=>String(r.ACTIVE||'').trim().toUpperCase()==='YES' && (r['ROLE LABEL']||r['SHEET TAB']))
+      .map(r=>({
+        label:String(r['ROLE LABEL']||r['SHEET TAB']).trim(),
+        sheet:String(r['SHEET TAB']||r['ROLE LABEL']).trim(),
+        sort:Number(r['SORT ORDER']||999)
+      }))
+      .sort((a,b)=>a.sort-b.sort);
+
+    const validated=[];
+    for(const role of configured){
+      try{
+        const data=await fetchSheet(role.sheet);
+        SHEET_CACHE.set(role.sheet,data);
+        validated.push(role);
+      }catch(e){
+        console.warn(`Role hidden because sheet "${role.sheet}" could not be read`,e);
+      }
+    }
+
+    if(!validated.length){
+      rolesEl.innerHTML='<div class="status-box" style="grid-column:1/-1">No website roles are currently configured.</div>';
+      stateEl.innerHTML='';
+      return;
+    }
+
+    validated.forEach((r,index)=>{
+      const b=document.createElement('button');
+      b.className='role';b.type='button';b.dataset.sheet=r.sheet;
+      b.innerHTML=`<span class="role-kicker">Role ${String(index+1).padStart(2,'0')}</span><span class="role-title">${esc(r.label)}</span><small>Watch available candidates</small>`;
+      b.addEventListener('click',()=>loadRole(r,b));
+      rolesEl.appendChild(b);
+    });
+
+    stateEl.innerHTML=initialGalleryPlaceholder();
+    track('website_roles_loaded',{count:validated.length});
+  }catch(err){
+    console.error(err);
+    rolesEl.innerHTML='<div class="status-box" style="grid-column:1/-1"><strong>Roles could not be loaded.</strong><br><span style="font-size:13px">Check the WEBSITE ROLES tab in the candidate database.</span></div>';
+    stateEl.innerHTML='';
+  }
+}
+
+function initialGalleryPlaceholder(){
+  return `<div class="status-box">Choose a role above to meet candidates who are available now.</div>
+    <div class="preview-placeholders">${Array.from({length:6},()=>'<div class="preview-placeholder" aria-hidden="true"><div class="preview-screen">▶</div><div class="preview-lines"><div class="preview-line"></div><div class="preview-line short"></div></div></div>').join('')}</div>`;
+}
+
+initRoles();
 
 function track(event,data={}){
   window.dataLayer=window.dataLayer||[];
@@ -469,7 +563,8 @@ async function loadRole(role,button){
   button.classList.add('active');candidatesEl.innerHTML='';
   stateEl.innerHTML='<div class="status-box">Loading currently available candidates…</div>';
   try{
-    const rows=await fetchSheet(role.sheet);
+    const rows=SHEET_CACHE.has(role.sheet)?SHEET_CACHE.get(role.sheet):await fetchSheet(role.sheet);
+    SHEET_CACHE.set(role.sheet,rows);
     const availableRows=rows
       .filter(r=>String(r.STATUS||'').trim().toUpperCase()==='AVAILABLE' && r.NAME && (r.VIDEO||r['VIDEO LINK']))
       .sort((a,b)=>parseDate(a['LAST SHOWN'])-parseDate(b['LAST SHOWN']));
